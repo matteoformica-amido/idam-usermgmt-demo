@@ -10,6 +10,7 @@ import uk.gov.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -59,6 +61,12 @@ public class IdamUserResourceIT {
 
     @Autowired
     private IdamUserRepository idamUserRepository;
+
+    @Mock
+    private IdamUserRepository idamUserRepositoryMock;
+
+    @Mock
+    private IdamUserService idamUserServiceMock;
 
     @Autowired
     private IdamUserService idamUserService;
@@ -204,6 +212,39 @@ public class IdamUserResourceIT {
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
     
+    @SuppressWarnings({"unchecked"})
+    public void getAllIdamUsersWithEagerRelationshipsIsEnabled() throws Exception {
+        IdamUserResource idamUserResource = new IdamUserResource(idamUserServiceMock);
+        when(idamUserServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        MockMvc restIdamUserMockMvc = MockMvcBuilders.standaloneSetup(idamUserResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restIdamUserMockMvc.perform(get("/api/idam-users?eagerload=true"))
+        .andExpect(status().isOk());
+
+        verify(idamUserServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void getAllIdamUsersWithEagerRelationshipsIsNotEnabled() throws Exception {
+        IdamUserResource idamUserResource = new IdamUserResource(idamUserServiceMock);
+            when(idamUserServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+            MockMvc restIdamUserMockMvc = MockMvcBuilders.standaloneSetup(idamUserResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restIdamUserMockMvc.perform(get("/api/idam-users?eagerload=true"))
+        .andExpect(status().isOk());
+
+            verify(idamUserServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
     @Test
     @Transactional
     public void getIdamUser() throws Exception {

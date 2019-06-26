@@ -28,7 +28,13 @@ public interface IdamUserService {
      */
     Page<IdamUser> findAll(Pageable pageable);
 
-
+    /**
+     * Get all the idamUsers with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    Page<IdamUser> findAllWithEagerRelationships(Pageable pageable);
+    
     /**
      * Get the "id" idamUser.
      *

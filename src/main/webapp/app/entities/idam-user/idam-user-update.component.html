@@ -35,6 +35,12 @@
                            formControlName="status"/>
                 </div>
 
+                <div class="form-group">
+                    <label for="field_roles">Roles</label>
+                    <select class="form-control" id="field_roles" multiple name="roles" formControlName="roles">
+                        <option [ngValue]="getSelected(editForm.get('roles').value, idamRoleOption)" *ngFor="let idamRoleOption of idamroles; trackBy: trackIdamRoleById">{{idamRoleOption.id}}</option>
+                    </select>
+                </div>
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">

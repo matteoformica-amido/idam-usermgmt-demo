@@ -1,5 +1,4 @@
 package uk.gov.domain;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -43,9 +42,11 @@ public class IdamUser implements Serializable {
     @Column(name = "status")
     private String status;
 
-    @ManyToMany(mappedBy = "members")
+    @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JsonIgnore
+    @JoinTable(name = "idam_user_roles",
+               joinColumns = @JoinColumn(name = "idam_user_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
     private Set<IdamRole> roles = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

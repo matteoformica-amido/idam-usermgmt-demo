@@ -61,6 +61,15 @@ public class IdamUserServiceImpl implements IdamUserService {
         return idamUserRepository.findAll(pageable);
     }
 
+    /**
+     * Get all the idamUsers with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<IdamUser> findAllWithEagerRelationships(Pageable pageable) {
+        return idamUserRepository.findAllWithEagerRelationships(pageable);
+    }
+    
 
     /**
      * Get one idamUser by id.
@@ -72,7 +81,7 @@ public class IdamUserServiceImpl implements IdamUserService {
     @Transactional(readOnly = true)
     public Optional<IdamUser> findOne(Long id) {
         log.debug("Request to get IdamUser : {}", id);
-        return idamUserRepository.findById(id);
+        return idamUserRepository.findOneWithEagerRelationships(id);
     }
 
     /**

@@ -25,7 +25,8 @@ export class IdamUserUpdateComponent implements OnInit {
     email: [],
     firstName: [],
     lastName: [],
-    status: []
+    status: [],
+    roles: []
   });
 
   constructor(
@@ -57,7 +58,8 @@ export class IdamUserUpdateComponent implements OnInit {
       email: idamUser.email,
       firstName: idamUser.firstName,
       lastName: idamUser.lastName,
-      status: idamUser.status
+      status: idamUser.status,
+      roles: idamUser.roles
     });
   }
 
@@ -83,7 +85,8 @@ export class IdamUserUpdateComponent implements OnInit {
       email: this.editForm.get(['email']).value,
       firstName: this.editForm.get(['firstName']).value,
       lastName: this.editForm.get(['lastName']).value,
-      status: this.editForm.get(['status']).value
+      status: this.editForm.get(['status']).value,
+      roles: this.editForm.get(['roles']).value
     };
   }
 
