@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity IdamRole.
+    -->
+    <changeSet id="20190626145241-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="idam_role_id"
+                                 baseTableName="idam_role_members"
+                                 constraintName="fk_idam_role_members_idam_role_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="idam_role"/>
+
+        <addForeignKeyConstraint baseColumnNames="members_id"
+                                 baseTableName="idam_role_members"
+                                 constraintName="fk_idam_role_members_members_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="idam_user"/>
+        
+    </changeSet>
+</databaseChangeLog>

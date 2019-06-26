@@ -7,6 +7,10 @@ import { RouterModule } from '@angular/router';
       {
         path: 'idam-user',
         loadChildren: './idam-user/idam-user.module#UsermgmtdemoIdamUserModule'
+      },
+      {
+        path: 'idam-role',
+        loadChildren: './idam-role/idam-role.module#UsermgmtdemoIdamRoleModule'
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

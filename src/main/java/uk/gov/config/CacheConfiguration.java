@@ -44,6 +44,9 @@ public class CacheConfiguration {
             createCache(cm, uk.gov.domain.Authority.class.getName());
             createCache(cm, uk.gov.domain.User.class.getName() + ".authorities");
             createCache(cm, uk.gov.domain.IdamUser.class.getName());
+            createCache(cm, uk.gov.domain.IdamUser.class.getName() + ".roles");
+            createCache(cm, uk.gov.domain.IdamRole.class.getName());
+            createCache(cm, uk.gov.domain.IdamRole.class.getName() + ".members");
             // jhipster-needle-ehcache-add-entry
         };
     }

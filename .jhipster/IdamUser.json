@@ -1,7 +1,15 @@
 {
     "fluentMethods": true,
     "clientRootFolder": "",
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipName": "roles",
+            "otherEntityName": "idamRole",
+            "relationshipType": "many-to-many",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "members"
+        }
+    ],
     "fields": [
         {
             "fieldName": "uid",
@@ -21,10 +29,6 @@
         },
         {
             "fieldName": "status",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "roles",
             "fieldType": "String"
         }
     ],

@@ -57,9 +57,6 @@ public class IdamUserResourceIT {
     private static final String DEFAULT_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_STATUS = "BBBBBBBBBB";
 
-    private static final String DEFAULT_ROLES = "AAAAAAAAAA";
-    private static final String UPDATED_ROLES = "BBBBBBBBBB";
-
     @Autowired
     private IdamUserRepository idamUserRepository;
 
@@ -117,8 +114,7 @@ public class IdamUserResourceIT {
             .email(DEFAULT_EMAIL)
             .firstName(DEFAULT_FIRST_NAME)
             .lastName(DEFAULT_LAST_NAME)
-            .status(DEFAULT_STATUS)
-            .roles(DEFAULT_ROLES);
+            .status(DEFAULT_STATUS);
         return idamUser;
     }
     /**
@@ -133,8 +129,7 @@ public class IdamUserResourceIT {
             .email(UPDATED_EMAIL)
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
-            .status(UPDATED_STATUS)
-            .roles(UPDATED_ROLES);
+            .status(UPDATED_STATUS);
         return idamUser;
     }
 
@@ -163,7 +158,6 @@ public class IdamUserResourceIT {
         assertThat(testIdamUser.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
         assertThat(testIdamUser.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
         assertThat(testIdamUser.getStatus()).isEqualTo(DEFAULT_STATUS);
-        assertThat(testIdamUser.getRoles()).isEqualTo(DEFAULT_ROLES);
 
         // Validate the IdamUser in Elasticsearch
         verify(mockIdamUserSearchRepository, times(1)).save(testIdamUser);
@@ -207,8 +201,7 @@ public class IdamUserResourceIT {
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME.toString())))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME.toString())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].roles").value(hasItem(DEFAULT_ROLES.toString())));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
     
     @Test
@@ -226,8 +219,7 @@ public class IdamUserResourceIT {
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL.toString()))
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME.toString()))
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME.toString()))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
-            .andExpect(jsonPath("$.roles").value(DEFAULT_ROLES.toString()));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
 
     @Test
@@ -257,8 +249,7 @@ public class IdamUserResourceIT {
             .email(UPDATED_EMAIL)
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
-            .status(UPDATED_STATUS)
-            .roles(UPDATED_ROLES);
+            .status(UPDATED_STATUS);
 
         restIdamUserMockMvc.perform(put("/api/idam-users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -274,7 +265,6 @@ public class IdamUserResourceIT {
         assertThat(testIdamUser.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(testIdamUser.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(testIdamUser.getStatus()).isEqualTo(UPDATED_STATUS);
-        assertThat(testIdamUser.getRoles()).isEqualTo(UPDATED_ROLES);
 
         // Validate the IdamUser in Elasticsearch
         verify(mockIdamUserSearchRepository, times(1)).save(testIdamUser);
@@ -338,8 +328,7 @@ public class IdamUserResourceIT {
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
-            .andExpect(jsonPath("$.[*].roles").value(hasItem(DEFAULT_ROLES)));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
     }
 
     @Test

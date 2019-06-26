@@ -4,15 +4,15 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
-import { IdamUserService } from 'app/entities/idam-user/idam-user.service';
-import { IIdamUser, IdamUser } from 'app/shared/model/idam-user.model';
+import { IdamRoleService } from 'app/entities/idam-role/idam-role.service';
+import { IIdamRole, IdamRole } from 'app/shared/model/idam-role.model';
 
 describe('Service Tests', () => {
-  describe('IdamUser Service', () => {
+  describe('IdamRole Service', () => {
     let injector: TestBed;
-    let service: IdamUserService;
+    let service: IdamRoleService;
     let httpMock: HttpTestingController;
-    let elemDefault: IIdamUser;
+    let elemDefault: IIdamRole;
     let expectedResult;
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -20,10 +20,10 @@ describe('Service Tests', () => {
       });
       expectedResult = {};
       injector = getTestBed();
-      service = injector.get(IdamUserService);
+      service = injector.get(IdamRoleService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new IdamUser(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new IdamRole(0, 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -39,7 +39,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: elemDefault });
       });
 
-      it('should create a IdamUser', async () => {
+      it('should create a IdamRole', async () => {
         const returnedFromService = Object.assign(
           {
             id: 0
@@ -48,7 +48,7 @@ describe('Service Tests', () => {
         );
         const expected = Object.assign({}, returnedFromService);
         service
-          .create(new IdamUser(null))
+          .create(new IdamRole(null))
           .pipe(take(1))
           .subscribe(resp => (expectedResult = resp));
         const req = httpMock.expectOne({ method: 'POST' });
@@ -56,14 +56,10 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: expected });
       });
 
-      it('should update a IdamUser', async () => {
+      it('should update a IdamRole', async () => {
         const returnedFromService = Object.assign(
           {
-            uid: 'BBBBBB',
-            email: 'BBBBBB',
-            firstName: 'BBBBBB',
-            lastName: 'BBBBBB',
-            status: 'BBBBBB'
+            roleName: 'BBBBBB'
           },
           elemDefault
         );
@@ -78,14 +74,10 @@ describe('Service Tests', () => {
         expect(expectedResult).toMatchObject({ body: expected });
       });
 
-      it('should return a list of IdamUser', async () => {
+      it('should return a list of IdamRole', async () => {
         const returnedFromService = Object.assign(
           {
-            uid: 'BBBBBB',
-            email: 'BBBBBB',
-            firstName: 'BBBBBB',
-            lastName: 'BBBBBB',
-            status: 'BBBBBB'
+            roleName: 'BBBBBB'
           },
           elemDefault
         );
@@ -103,7 +95,7 @@ describe('Service Tests', () => {
         expect(expectedResult).toContainEqual(expected);
       });
 
-      it('should delete a IdamUser', async () => {
+      it('should delete a IdamRole', async () => {
         const rxPromise = service.delete(123).subscribe(resp => (expectedResult = resp.ok));
 
         const req = httpMock.expectOne({ method: 'DELETE' });

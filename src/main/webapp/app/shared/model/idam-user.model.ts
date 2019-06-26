@@ -1,3 +1,5 @@
+import { IIdamRole } from 'app/shared/model/idam-role.model';
+
 export interface IIdamUser {
   id?: number;
   uid?: string;
@@ -5,7 +7,7 @@ export interface IIdamUser {
   firstName?: string;
   lastName?: string;
   status?: string;
-  roles?: string;
+  roles?: IIdamRole[];
 }
 
 export class IdamUser implements IIdamUser {
@@ -16,6 +18,6 @@ export class IdamUser implements IIdamUser {
     public firstName?: string,
     public lastName?: string,
     public status?: string,
-    public roles?: string
+    public roles?: IIdamRole[]
   ) {}
 }

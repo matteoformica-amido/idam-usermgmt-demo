@@ -1,4 +1,5 @@
 package uk.gov.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -6,6 +7,8 @@ import javax.persistence.*;
 
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -40,8 +43,10 @@ public class IdamUser implements Serializable {
     @Column(name = "status")
     private String status;
 
-    @Column(name = "roles")
-    private String roles;
+    @ManyToMany(mappedBy = "members")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
+    private Set<IdamRole> roles = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -117,17 +122,29 @@ public class IdamUser implements Serializable {
         this.status = status;
     }
 
-    public String getRoles() {
+    public Set<IdamRole> getRoles() {
         return roles;
     }
 
-    public IdamUser roles(String roles) {
-        this.roles = roles;
+    public IdamUser roles(Set<IdamRole> idamRoles) {
+        this.roles = idamRoles;
         return this;
     }
 
-    public void setRoles(String roles) {
-        this.roles = roles;
+    public IdamUser addRoles(IdamRole idamRole) {
+        this.roles.add(idamRole);
+        idamRole.getMembers().add(this);
+        return this;
+    }
+
+    public IdamUser removeRoles(IdamRole idamRole) {
+        this.roles.remove(idamRole);
+        idamRole.getMembers().remove(this);
+        return this;
+    }
+
+    public void setRoles(Set<IdamRole> idamRoles) {
+        this.roles = idamRoles;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -156,7 +173,6 @@ public class IdamUser implements Serializable {
             ", firstName='" + getFirstName() + "'" +
             ", lastName='" + getLastName() + "'" +
             ", status='" + getStatus() + "'" +
-            ", roles='" + getRoles() + "'" +
             "}";
     }
 }

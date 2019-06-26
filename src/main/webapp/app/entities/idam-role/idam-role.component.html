@@ -1,10 +1,10 @@
 <div>
     <h2 id="page-heading">
-        <span>Idam Users</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-idam-user" [routerLink]="['/idam-user/new']">
+        <span>Idam Roles</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-idam-role" [routerLink]="['/idam-role/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span class="hidden-sm-down" >
-            Create new Idam User
+            Create new Idam Role
             </span>
         </button>
     </h2>
@@ -25,46 +25,38 @@
         </div>
     </div>
     <br/>
-    <div class="alert alert-warning" *ngIf="idamUsers?.length === 0">
-        <span>No idamUsers found</span>
+    <div class="alert alert-warning" *ngIf="idamRoles?.length === 0">
+        <span>No idamRoles found</span>
     </div>
-    <div class="table-responsive" *ngIf="idamUsers?.length > 0">
+    <div class="table-responsive" *ngIf="idamRoles?.length > 0">
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
             <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="uid"><span>Uid</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="email"><span>Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="firstName"><span>First Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastName"><span>Last Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="status"><span>Status</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="roleName"><span>Role Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
-            <tr *ngFor="let idamUser of idamUsers ;trackBy: trackId">
-                <td><a [routerLink]="['/idam-user', idamUser.id, 'view' ]">{{idamUser.id}}</a></td>
-                <td>{{idamUser.uid}}</td>
-                <td>{{idamUser.email}}</td>
-                <td>{{idamUser.firstName}}</td>
-                <td>{{idamUser.lastName}}</td>
-                <td>{{idamUser.status}}</td>
+            <tr *ngFor="let idamRole of idamRoles ;trackBy: trackId">
+                <td><a [routerLink]="['/idam-role', idamRole.id, 'view' ]">{{idamRole.id}}</a></td>
+                <td>{{idamRole.roleName}}</td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"
-                                [routerLink]="['/idam-user', idamUser.id, 'view' ]"
+                                [routerLink]="['/idam-role', idamRole.id, 'view' ]"
                                 class="btn btn-info btn-sm">
                             <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/idam-user', idamUser.id, 'edit']"
+                                [routerLink]="['/idam-role', idamRole.id, 'edit']"
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', 'idam-user', { outlets: { popup: idamUser.id + '/delete'} }]"
+                                [routerLink]="['/', 'idam-role', { outlets: { popup: idamRole.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
