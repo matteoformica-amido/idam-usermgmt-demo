@@ -43,6 +43,7 @@ public class CacheConfiguration {
             createCache(cm, uk.gov.domain.User.class.getName());
             createCache(cm, uk.gov.domain.Authority.class.getName());
             createCache(cm, uk.gov.domain.User.class.getName() + ".authorities");
+            createCache(cm, uk.gov.domain.IdamUser.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
