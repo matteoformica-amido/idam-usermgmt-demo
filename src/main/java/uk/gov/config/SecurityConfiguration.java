@@ -1,5 +1,6 @@
 package uk.gov.config;
 
+import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import uk.gov.security.*;
 
 import org.springframework.context.annotation.Bean;
@@ -107,9 +108,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
             authorities.forEach(authority -> {
-                OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
-                mappedAuthorities.addAll(mapRolesToGrantedAuthorities(
-                    getRolesFromClaims(oidcUserAuthority.getUserInfo().getClaims())));
+                if(authority instanceof  OidcUserAuthority) {
+                    OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
+                    mappedAuthorities.addAll(mapRolesToGrantedAuthorities(
+                        getRolesFromClaims(oidcUserAuthority.getUserInfo().getClaims())));
+                }
+                if(authority instanceof OAuth2UserAuthority){
+                    OAuth2UserAuthority oAuth2UserAuthority = (OAuth2UserAuthority) authority;
+                    Map<String, Object> userAttributes = oAuth2UserAuthority.getAttributes();
+
+                    mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                    mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+//                    if (userAttributes.containsKey("role")){
+//                        String roleName =(String)userAttributes.get("role");
+//                        System.out.println("ROLE: "+roleName);
+//                        mappedAuthorities.add(new SimpleGrantedAuthority(roleName));
+//                    }
+
+                }
             });
 
             return mappedAuthorities;

@@ -110,7 +110,7 @@ spring:
           oidc:
             client-id: web_app
             client-secret: web_app
-
+            scope: openid manage-user create-user profile acr authorities email roles
 server:
   servlet:
     session:
@@ -162,3 +162,6 @@ jhipster:
 # ===================================================================
 
 # application:
+idam:
+  api:
+    root: http://localhost:5000/

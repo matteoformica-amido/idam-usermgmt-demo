@@ -1,6 +1,22 @@
 package uk.gov.web.rest;
 
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import uk.gov.domain.IdamUser;
+import uk.gov.hmcts.reform.idam.api.external.UserManagementApi;
+import uk.gov.hmcts.reform.idam.api.shared.model.User;
 import uk.gov.service.IdamUserService;
 import uk.gov.web.rest.errors.BadRequestAlertException;
 
@@ -19,14 +35,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link uk.gov.domain.IdamUser}.
@@ -44,9 +62,23 @@ public class IdamUserResource {
 
     private final IdamUserService idamUserService;
 
+    @Autowired
+    private OAuth2AuthorizedClientService clientService;
+
+    @Autowired
+    private UserManagementApi userManagementApi;
+
+    @Autowired
+    private UserManagementApi userRoleManagementApi;
+
+    @Autowired
     public IdamUserResource(IdamUserService idamUserService) {
         this.idamUserService = idamUserService;
+
+
     }
+
+
 
     /**
      * {@code POST  /idam-users} : Create a new idamUser.
@@ -57,6 +89,9 @@ public class IdamUserResource {
      */
     @PostMapping("/idam-users")
     public ResponseEntity<IdamUser> createIdamUser(@RequestBody IdamUser idamUser) throws URISyntaxException {
+
+
+
         log.debug("REST request to save IdamUser : {}", idamUser);
         if (idamUser.getId() != null) {
             throw new BadRequestAlertException("A new idamUser cannot already have an ID", ENTITY_NAME, "idexists");
@@ -99,6 +134,29 @@ public class IdamUserResource {
      */
     @GetMapping("/idam-users")
     public ResponseEntity<List<IdamUser>> getAllIdamUsers(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder, @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+
+        OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        OAuth2AuthorizedClient client =
+            clientService.loadAuthorizedClient(
+                authentication.getAuthorizedClientRegistrationId(),
+                authentication.getName());
+
+        String tokenType = client.getAccessToken().getTokenType().getValue();
+        String token = client.getAccessToken().getTokenValue();
+        System.out.println("TOKEN: "+token);
+
+        RestTemplate restTemplate = new RestTemplate();
+        String fooResourceUrl = "http://localhost:5000/api/v1/users?email=idamOwner@hmcts.net";
+        HttpHeaders headers2 = new HttpHeaders();
+        headers2.setBearerAuth(token);
+
+        ResponseEntity<User> entity = restTemplate.exchange(
+            fooResourceUrl, HttpMethod.GET, new HttpEntity<User>(headers2),
+            User.class);
+
+        //User u = userManagementApi.getUserByEmail("Bearer "+token, "demouser@hmcts.net");
+        System.out.println("USER: "+entity.getBody().getEmail());
+
         log.debug("REST request to get a page of IdamUsers");
         Page<IdamUser> page;
         if (eagerload) {
@@ -153,5 +211,7 @@ public class IdamUserResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+
+
 
 }

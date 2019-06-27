@@ -25,7 +25,7 @@
     <root level="${logging.level.root}">
         <appender-ref ref="ASYNC"/>
     </root>
--->
+    -->
 
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
