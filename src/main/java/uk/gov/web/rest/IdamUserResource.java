@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import uk.gov.domain.IdamUser;
+import uk.gov.domain.IdmUsers;
 import uk.gov.hmcts.reform.idam.api.external.UserManagementApi;
 import uk.gov.hmcts.reform.idam.api.shared.model.User;
 import uk.gov.service.IdamUserService;
@@ -57,6 +58,9 @@ public class IdamUserResource {
 
     private static final String ENTITY_NAME = "idamUser";
 
+    private static final String IDAM_API_USERS_BASE_URI = "http://localhost:5000/api/v1/users";
+    private static final String FR_IDM_API_GET_ALL_USERS_URI = "http://localhost:18080/openidm/managed/user?_pageSize=100&_queryFilter=true&_fields=mail,userName,givenName,sn,accountStatus,roles";
+
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
@@ -74,8 +78,6 @@ public class IdamUserResource {
     @Autowired
     public IdamUserResource(IdamUserService idamUserService) {
         this.idamUserService = idamUserService;
-
-
     }
 
 
@@ -123,6 +125,18 @@ public class IdamUserResource {
             .body(result);
     }
 
+    private String getAccessToken(){
+        OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        OAuth2AuthorizedClient client =
+            clientService.loadAuthorizedClient(
+                authentication.getAuthorizedClientRegistrationId(),
+                authentication.getName());
+
+        String tokenType = client.getAccessToken().getTokenType().getValue();
+        System.out.println("TOKEN: "+client.getAccessToken().getTokenValue());
+        return client.getAccessToken().getTokenValue();
+    }
+
     /**
      * {@code GET  /idam-users} : get all the idamUsers.
      *
@@ -135,29 +149,23 @@ public class IdamUserResource {
     @GetMapping("/idam-users")
     public ResponseEntity<List<IdamUser>> getAllIdamUsers(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder, @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
 
-        OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        OAuth2AuthorizedClient client =
-            clientService.loadAuthorizedClient(
-                authentication.getAuthorizedClientRegistrationId(),
-                authentication.getName());
-
-        String tokenType = client.getAccessToken().getTokenType().getValue();
-        String token = client.getAccessToken().getTokenValue();
-        System.out.println("TOKEN: "+token);
-
         RestTemplate restTemplate = new RestTemplate();
-        String fooResourceUrl = "http://localhost:5000/api/v1/users?email=idamOwner@hmcts.net";
         HttpHeaders headers2 = new HttpHeaders();
-        headers2.setBearerAuth(token);
+        //headers2.setBearerAuth(getAccessToken());
+        headers2.add("X-OpenIDM-Username", "openidm-admin");
+        headers2.add("X-OpenIDM-Password", "openidm-admin");
 
-        ResponseEntity<User> entity = restTemplate.exchange(
-            fooResourceUrl, HttpMethod.GET, new HttpEntity<User>(headers2),
-            User.class);
+        ResponseEntity<IdmUsers> entity = restTemplate.exchange(
+            FR_IDM_API_GET_ALL_USERS_URI, HttpMethod.GET, new HttpEntity<IdmUsers>(headers2),
+            IdmUsers.class);
 
         //User u = userManagementApi.getUserByEmail("Bearer "+token, "demouser@hmcts.net");
-        System.out.println("USER: "+entity.getBody().getEmail());
+        System.out.println("IDM USERS: "+entity.getBody().users.size());
 
         log.debug("REST request to get a page of IdamUsers");
+
+        
+
         Page<IdamUser> page;
         if (eagerload) {
             page = idamUserService.findAllWithEagerRelationships(pageable);
