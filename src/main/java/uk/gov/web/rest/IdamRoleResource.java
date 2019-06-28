@@ -1,6 +1,9 @@
 package uk.gov.web.rest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
 import uk.gov.domain.IdamRole;
+import uk.gov.repository.search.IdamRoleSearchRepository;
 import uk.gov.service.IdamRoleService;
 import uk.gov.web.rest.errors.BadRequestAlertException;
 
@@ -22,8 +25,11 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -33,7 +39,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
  */
 @RestController
 @RequestMapping("/api")
-public class IdamRoleResource {
+public class IdamRoleResource extends BaseResource {
 
     private final Logger log = LoggerFactory.getLogger(IdamRoleResource.class);
 
@@ -43,6 +49,9 @@ public class IdamRoleResource {
     private String applicationName;
 
     private final IdamRoleService idamRoleService;
+
+    @Autowired
+    protected IdamRoleSearchRepository idamRoleSearchRepository;
 
     public IdamRoleResource(IdamRoleService idamRoleService) {
         this.idamRoleService = idamRoleService;
@@ -101,11 +110,14 @@ public class IdamRoleResource {
     public ResponseEntity<List<IdamRole>> getAllIdamRoles(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder, @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get a page of IdamRoles");
         Page<IdamRole> page;
-        if (eagerload) {
-            page = idamRoleService.findAllWithEagerRelationships(pageable);
-        } else {
-            page = idamRoleService.findAll(pageable);
-        }
+
+
+        Set<IdamRole> idamRoles = super.getIdmRoles();
+        System.out.println("ROLES TOTAL: "+idamRoles.size()+" - MAP SIZE:"+roleNames.size());
+        page = new PageImpl<IdamRole>(new ArrayList(idamRoles));
+
+        idamRoleSearchRepository.saveAll(page.getContent());
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

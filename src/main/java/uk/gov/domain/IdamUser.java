@@ -42,6 +42,16 @@ public class IdamUser implements Serializable {
     @Column(name = "status")
     private String status;
 
+    private String rolesList;
+
+    public String getRolesList() {
+        return rolesList;
+    }
+
+    public void setRolesList(String rolesList) {
+        this.rolesList = rolesList;
+    }
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "idam_user_roles",

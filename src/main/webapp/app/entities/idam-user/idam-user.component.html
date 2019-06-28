@@ -1,10 +1,10 @@
 <div>
     <h2 id="page-heading">
-        <span>Idam Users</span>
+        <span>IDAM Users</span>
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-idam-user" [routerLink]="['/idam-user/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span class="hidden-sm-down" >
-            Create new Idam User
+            Create new IDAM User
             </span>
         </button>
     </h2>
@@ -26,7 +26,7 @@
     </div>
     <br/>
     <div class="alert alert-warning" *ngIf="idamUsers?.length === 0">
-        <span>No idamUsers found</span>
+        <span>No IDAM Users found</span>
     </div>
     <div class="table-responsive" *ngIf="idamUsers?.length > 0">
         <table class="table table-striped">

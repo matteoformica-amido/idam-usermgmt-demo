@@ -26,7 +26,8 @@ export class IdamUserUpdateComponent implements OnInit {
     firstName: [],
     lastName: [],
     status: [],
-    roles: []
+    roles: [],
+    rolesList: []
   });
 
   constructor(
@@ -59,7 +60,8 @@ export class IdamUserUpdateComponent implements OnInit {
       firstName: idamUser.firstName,
       lastName: idamUser.lastName,
       status: idamUser.status,
-      roles: idamUser.roles
+      roles: idamUser.roles,
+      rolesList: idamUser.rolesList
     });
   }
 
@@ -86,7 +88,8 @@ export class IdamUserUpdateComponent implements OnInit {
       firstName: this.editForm.get(['firstName']).value,
       lastName: this.editForm.get(['lastName']).value,
       status: this.editForm.get(['status']).value,
-      roles: this.editForm.get(['roles']).value
+      roles: this.editForm.get(['roles']).value,
+      rolesList: this.editForm.get(['rolesList']).value
     };
   }
 
@@ -108,6 +111,10 @@ export class IdamUserUpdateComponent implements OnInit {
 
   trackIdamRoleById(index: number, item: IIdamRole) {
     return item.id;
+  }
+
+  trackIdamRoleByName(index: number, item: IIdamRole) {
+    return item.roleName;
   }
 
   getSelected(selectedVals: Array<any>, option: any) {

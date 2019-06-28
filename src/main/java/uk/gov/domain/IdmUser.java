@@ -18,6 +18,78 @@ public class IdmUser {
     @JsonProperty
     private String _id;
 
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public String get_rev() {
+        return _rev;
+    }
+
+    public void set_rev(String _rev) {
+        this._rev = _rev;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getForename() {
+        return forename;
+    }
+
+    public void setForename(String forename) {
+        this.forename = forename;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(String accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
+    public List<IdmUserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<IdmUserRole> roles) {
+        this.roles = roles;
+    }
+
+    public String getTacticalRoles() {
+        return tacticalRoles;
+    }
+
+    public void setTacticalRoles(String tacticalRoles) {
+        this.tacticalRoles = tacticalRoles;
+    }
+
     @JsonProperty
     private String _rev;
 
@@ -41,4 +113,6 @@ public class IdmUser {
 
     @JsonProperty
     private String tacticalRoles;
+
+
 }

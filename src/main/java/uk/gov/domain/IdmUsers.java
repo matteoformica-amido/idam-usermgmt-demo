@@ -21,6 +21,54 @@ public class IdmUsers {
     @JsonProperty("resultCount")
     public int resultCount;
 
+    public List<IdmUser> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<IdmUser> users) {
+        this.users = users;
+    }
+
+    public int getResultCount() {
+        return resultCount;
+    }
+
+    public void setResultCount(int resultCount) {
+        this.resultCount = resultCount;
+    }
+
+    public String getPagedResultsCookie() {
+        return pagedResultsCookie;
+    }
+
+    public void setPagedResultsCookie(String pagedResultsCookie) {
+        this.pagedResultsCookie = pagedResultsCookie;
+    }
+
+    public String getTotalPagedResultsPolicy() {
+        return totalPagedResultsPolicy;
+    }
+
+    public void setTotalPagedResultsPolicy(String totalPagedResultsPolicy) {
+        this.totalPagedResultsPolicy = totalPagedResultsPolicy;
+    }
+
+    public int getTotalPagedResults() {
+        return totalPagedResults;
+    }
+
+    public void setTotalPagedResults(int totalPagedResults) {
+        this.totalPagedResults = totalPagedResults;
+    }
+
+    public int getRemainingPagedResults() {
+        return remainingPagedResults;
+    }
+
+    public void setRemainingPagedResults(int remainingPagedResults) {
+        this.remainingPagedResults = remainingPagedResults;
+    }
+
     @JsonProperty("pagedResultsCookie")
     public String pagedResultsCookie;
 

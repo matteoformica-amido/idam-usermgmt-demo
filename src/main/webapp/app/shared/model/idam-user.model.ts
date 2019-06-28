@@ -7,6 +7,7 @@ export interface IIdamUser {
   firstName?: string;
   lastName?: string;
   status?: string;
+  rolesList?: string;
   roles?: IIdamRole[];
 }
 
@@ -18,6 +19,7 @@ export class IdamUser implements IIdamUser {
     public firstName?: string,
     public lastName?: string,
     public status?: string,
+    public rolesList?: string,
     public roles?: IIdamRole[]
   ) {}
 }
