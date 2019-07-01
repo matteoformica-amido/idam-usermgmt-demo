@@ -45,9 +45,10 @@ Navbar
 Logo styles
 ========================================================================== */
 .logo-img {
+  display: none;
   height: 91px;
-  width: 135px;
-  display: inline-block;
+  width: 180px;
+  //display: inline-block;
   vertical-align: middle;
   background: url('../../../content/images/hmcts-logo.png') no-repeat center center;
   background-size: contain;

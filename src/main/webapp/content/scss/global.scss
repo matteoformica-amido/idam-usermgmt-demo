@@ -81,7 +81,15 @@ Generic styles
 }
 
 .footer {
-  border-top: 1px solid rgba(0, 0, 0, 0.125);
+  padding: 50px;
+  background-color: #dee0e2;
+  height: 250px;
+  background-image: url('../../content/images/logo-footer.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top right;
+  background-origin: content-box;
+  box-shadow: 0 50vh 0 50vh #dee0e2;
 }
 
 .hand,
